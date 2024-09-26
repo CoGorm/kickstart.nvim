@@ -156,6 +156,8 @@ vim.opt.scrolloff = 10
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
@@ -425,6 +427,10 @@ require('lazy').setup({
       { 'folke/neodev.nvim', opts = {} },
     },
     config = function()
+      -- Load the custom LSP module
+      local lsp = require 'kickstart-lsp'
+      -- Define the command to set the root directory dynamically
+      vim.cmd [[ command! -nargs=1 LspSetRoot lua require'kickstart-lsp'.set_root(<f-args>) ]]
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -576,7 +582,11 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
-        --
+        ast_grep = {
+          root_pattern = '.git',
+          'sgconfig.yaml',
+          'sgconfig.yml',
+        },
 
         lua_ls = {
           -- cmd = {...},
